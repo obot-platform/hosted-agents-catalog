@@ -1,8 +1,6 @@
-# A Google Agent Development Kit runtime with an example chatbot baked in, so
-# the sandbox boots with no network and the whole thing is signed and scanned
-# as one artifact. The agent is at obot-platform/obot-adk-chatbot; a template
-# can still set a gitRepo to run its own agent instead, which overrides the
-# baked-in one.
+# A runtime, not an agent. A template built on this harness points at a
+# repository holding the agent code, which the sandbox clones and starts; one
+# ADK runtime can run any number of different agents this way.
 #
 # A long-running HTTP server rather than a shell application, so it is not
 # interactive: it needs no TTY and would not benefit from one.
@@ -12,7 +10,7 @@
 name: ADK
 description: >-
   Google's Agent Development Kit, serving an agent over HTTP.
-image: ghcr.io/obot-platform/obot-adk-chatbot:0.1.0
+image: ghcr.io/obot-platform/hosted-agents-images/adk:2.6.1
 interactive: false
 icon: data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNDI4NUY0IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTEuMDQgMTkuMzJRMTIgMjEuNTEgMTIgMjRxMC0yLjQ5LjkzLTQuNjguOTYtMi4xOSAyLjU4LTMuODF0My44MS0yLjU1UTIxLjUxIDEyIDI0IDEycS0yLjQ5IDAtNC42OC0uOTNhMTIuMyAxMi4zIDAgMCAxLTMuODEtMi41OCAxMi4zIDEyLjMgMCAwIDEtMi41OC0zLjgxUTEyIDIuNDkgMTIgMHEwIDIuNDktLjk2IDQuNjgtLjkzIDIuMTktMi41NSAzLjgxYTEyLjMgMTIuMyAwIDAgMS0zLjgxIDIuNThRMi40OSAxMiAwIDEycTIuNDkgMCA0LjY4Ljk2IDIuMTkuOTMgMy44MSAyLjU1dDIuNTUgMy44MSIvPjwvc3ZnPg==
 iconDark: data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjOEFCNEY4IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTEuMDQgMTkuMzJRMTIgMjEuNTEgMTIgMjRxMC0yLjQ5LjkzLTQuNjguOTYtMi4xOSAyLjU4LTMuODF0My44MS0yLjU1UTIxLjUxIDEyIDI0IDEycS0yLjQ5IDAtNC42OC0uOTNhMTIuMyAxMi4zIDAgMCAxLTMuODEtMi41OCAxMi4zIDEyLjMgMCAwIDEtMi41OC0zLjgxUTEyIDIuNDkgMTIgMHEwIDIuNDktLjk2IDQuNjgtLjkzIDIuMTktMi41NSAzLjgxYTEyLjMgMTIuMyAwIDAgMS0zLjgxIDIuNThRMi40OSAxMiAwIDEycTIuNDkgMCA0LjY4Ljk2IDIuMTkuOTMgMy44MSAyLjU1dDIuNTUgMy44MSIvPjwvc3ZnPg==
