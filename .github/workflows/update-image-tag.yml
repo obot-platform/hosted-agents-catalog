@@ -1,0 +1,95 @@
+name: Update Container Image Tag
+
+# The images repository publishes a tag and tells this one about it, so a
+# release does not depend on someone remembering to edit YAML here. The change
+# arrives as a pull request rather than a push: the catalog is what every
+# installation syncs, and a bad tag would reach all of them.
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_name:
+        description: "Container image name (without tag)"
+        required: true
+        type: string
+      new_tag:
+        description: "New image tag to update to"
+        required: true
+        type: string
+  repository_dispatch:
+    types: [update-image-tag]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-image-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install YAML parser
+        run: python -m pip install PyYAML
+
+      - name: Resolve inputs
+        id: inputs
+        run: |
+          echo "image_name=${{ github.event.inputs.image_name || github.event.client_payload.image_name }}" >> "$GITHUB_OUTPUT"
+          echo "new_tag=${{ github.event.inputs.new_tag || github.event.client_payload.new_tag }}" >> "$GITHUB_OUTPUT"
+
+      - name: Update harness images
+        id: update
+        env:
+          IMAGE_NAME: ${{ steps.inputs.outputs.image_name }}
+          NEW_TAG: ${{ steps.inputs.outputs.new_tag }}
+        run: |
+          python - <<'PY'
+          import os
+          import pathlib
+          import re
+
+          image = os.environ["IMAGE_NAME"]
+          tag = os.environ["NEW_TAG"]
+          if not image or not tag:
+              raise SystemExit("image_name and new_tag are both required")
+
+          # Rewritten as text rather than through a YAML round-trip, which would
+          # reformat every file it touched and bury the change in noise.
+          pattern = re.compile(rf"^(\s*image:\s*){re.escape(image)}:\S+\s*$", re.MULTILINE)
+          changed = []
+          for path in sorted(pathlib.Path(".").rglob("harness.yaml")):
+              if ".git" in path.parts:
+                  continue
+              original = path.read_text()
+              updated = pattern.sub(rf"\g<1>{image}:{tag}", original)
+              if updated != original:
+                  path.write_text(updated)
+                  changed.append(path.as_posix())
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"changed={' '.join(changed)}\n")
+          print("updated:", changed or "nothing")
+          PY
+
+      - name: Validate the result
+        if: ${{ steps.update.outputs.changed != '' }}
+        run: python .github/scripts/validate_catalog.py
+
+      - name: Open a pull request
+        if: ${{ steps.update.outputs.changed != '' }}
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: update-image-tag/${{ steps.inputs.outputs.new_tag }}
+          title: "chore: use ${{ steps.inputs.outputs.image_name }}:${{ steps.inputs.outputs.new_tag }}"
+          body: |
+            The images repository published `${{ steps.inputs.outputs.new_tag }}`.
+
+            Files updated: ${{ steps.update.outputs.changed }}
+          commit-message: |
+            chore: use ${{ steps.inputs.outputs.image_name }}:${{ steps.inputs.outputs.new_tag }}
