@@ -40,8 +40,13 @@ jobs:
       - name: Resolve inputs
         id: inputs
         run: |
-          echo "image_name=${{ github.event.inputs.image_name || github.event.client_payload.image_name }}" >> "$GITHUB_OUTPUT"
+          image_name="${{ github.event.inputs.image_name || github.event.client_payload.image_name }}"
+          echo "image_name=$image_name" >> "$GITHUB_OUTPUT"
           echo "new_tag=${{ github.event.inputs.new_tag || github.event.client_payload.new_tag }}" >> "$GITHUB_OUTPUT"
+          # A release dispatches once per image, concurrently. The branch must
+          # differ per image or the runs push over one another and only the
+          # last image's update survives.
+          echo "short_name=${image_name##*/}" >> "$GITHUB_OUTPUT"
 
       - name: Update harness images
         id: update
@@ -85,7 +90,7 @@ jobs:
         if: ${{ steps.update.outputs.changed != '' }}
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: update-image-tag/${{ steps.inputs.outputs.new_tag }}
+          branch: update-image-tag/${{ steps.inputs.outputs.short_name }}-${{ steps.inputs.outputs.new_tag }}
           title: "chore: use ${{ steps.inputs.outputs.image_name }}:${{ steps.inputs.outputs.new_tag }}"
           body: |
             The images repository published `${{ steps.inputs.outputs.new_tag }}`.
