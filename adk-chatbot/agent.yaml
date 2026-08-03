@@ -8,10 +8,9 @@ description: >-
   A conversational agent with a web UI, built on the Agent Development Kit.
   Give it MCP servers and chat with it in the browser.
 harnessID: adk-chatbot/harness.yaml
-# The agent itself. The harness is only a runtime: this is the code it serves,
-# cloned into the sandbox at start-up, so one ADK harness can run any number of
-# different agents.
-gitRepo: https://github.com/ibuildthecloud/obot-adk-chatbot.git
+# No gitRepo: the agent is baked into the harness image
+# (obot-platform/obot-adk-chatbot). Setting one here would override it, which is
+# how a user runs their own ADK agent on this runtime instead.
 icon: data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNDI4NUY0IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTEuMDQgMTkuMzJRMTIgMjEuNTEgMTIgMjRxMC0yLjQ5LjkzLTQuNjguOTYtMi4xOSAyLjU4LTMuODF0My44MS0yLjU1UTIxLjUxIDEyIDI0IDEycS0yLjQ5IDAtNC42OC0uOTNhMTIuMyAxMi4zIDAgMCAxLTMuODEtMi41OCAxMi4zIDEyLjMgMCAwIDEtMi41OC0zLjgxUTEyIDIuNDkgMTIgMHEwIDIuNDktLjk2IDQuNjgtLjkzIDIuMTktMi41NSAzLjgxYTEyLjMgMTIuMyAwIDAgMS0zLjgxIDIuNThRMi40OSAxMiAwIDEycTIuNDkgMCA0LjY4Ljk2IDIuMTkuOTMgMy44MSAyLjU1dDIuNTUgMy44MSIvPjwvc3ZnPg==
 iconDark: data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjOEFCNEY4IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMTEuMDQgMTkuMzJRMTIgMjEuNTEgMTIgMjRxMC0yLjQ5LjkzLTQuNjguOTYtMi4xOSAyLjU4LTMuODF0My44MS0yLjU1UTIxLjUxIDEyIDI0IDEycS0yLjQ5IDAtNC42OC0uOTNhMTIuMyAxMi4zIDAgMCAxLTMuODEtMi41OCAxMi4zIDEyLjMgMCAwIDEtMi41OC0zLjgxUTEyIDIuNDkgMTIgMHEwIDIuNDktLjk2IDQuNjgtLjkzIDIuMTktMi41NSAzLjgxYTEyLjMgMTIuMyAwIDAgMS0zLjgxIDIuNThRMi40OSAxMiAwIDEycTIuNDkgMCA0LjY4Ljk2IDIuMTkuOTMgMy44MSAyLjU1dDIuNTUgMy44MSIvPjwvc3ZnPg==
 port: 8000
