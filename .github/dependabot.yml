@@ -1,0 +1,10 @@
+# The harness images are pinned to a released tag. Dependabot cannot see those,
+# because they are moved by a pull request the images repository opens on
+# release; this keeps the actions used by that workflow current.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
