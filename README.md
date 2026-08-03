@@ -52,11 +52,13 @@ There is no release tag here: an installation syncs `main`, so merging is
 releasing. That is why CI validates every pull request the way Obot validates a
 sync -- a template that would fail to sync fails the build instead.
 
-Harness images are pinned to an exact released tag, never `latest`: an
-installation syncs this repository continuously, so a floating tag would change
-what every one of them runs the moment an image was published, with no record of
-what was deployed when.
+Harness images are pinned to an exact version, never `latest`: an installation
+syncs this repository continuously, so a floating tag would change what every
+one of them runs the moment an image was published, with no record of what was
+deployed when.
 
-Moving to a new image is therefore a reviewed change. The images repository
-opens the pull request when it publishes a release; merging it is what rolls the
-new image out.
+The tag is the version of the tool the image packages -- `claude-code:2.1.220`,
+`codex:0.146.0` -- so each image moves on its own release rather than a
+repo-wide one. When the images repository publishes a new version it opens a
+pull request here raising that harness's tag; merging it is the rollout. An Obot
+release pins a commit of this repository, which pins the whole set together.
