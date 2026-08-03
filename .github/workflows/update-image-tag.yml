@@ -41,12 +41,15 @@ jobs:
         id: inputs
         run: |
           image_name="${{ github.event.inputs.image_name || github.event.client_payload.image_name }}"
-          echo "image_name=$image_name" >> "$GITHUB_OUTPUT"
-          echo "new_tag=${{ github.event.inputs.new_tag || github.event.client_payload.new_tag }}" >> "$GITHUB_OUTPUT"
-          # A release dispatches once per image, concurrently. The branch must
-          # differ per image or the runs push over one another and only the
-          # last image's update survives.
-          echo "short_name=${image_name##*/}" >> "$GITHUB_OUTPUT"
+          new_tag="${{ github.event.inputs.new_tag || github.event.client_payload.new_tag }}"
+          {
+            echo "image_name=$image_name"
+            echo "new_tag=$new_tag"
+            # A release dispatches once per image, concurrently. The branch must
+            # differ per image or the runs push over one another and only the
+            # last image's update survives.
+            echo "short_name=${image_name##*/}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Update harness images
         id: update
