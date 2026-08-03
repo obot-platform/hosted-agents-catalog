@@ -88,7 +88,7 @@ jobs:
 
       - name: Open a pull request
         if: ${{ steps.update.outputs.changed != '' }}
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: update-image-tag/${{ steps.inputs.outputs.short_name }}-${{ steps.inputs.outputs.new_tag }}
           title: "chore: use ${{ steps.inputs.outputs.image_name }}:${{ steps.inputs.outputs.new_tag }}"
