@@ -14,15 +14,25 @@ terminal: true
 allowUserGitRepo: true
 allowUserMCPServers: true
 allowUserSkills: true
-# Every model the installation has, rather than one pinned choice. Obot marks
-# which is the default and which is the fast one, so the agent can pick sensibly
-# without the template having to name a model that may not exist here.
 # Claude Code is written against Anthropic's API, so it runs on Anthropic
 # models and nowhere else. Naming the provider is both the restriction and the
 # reason Obot can say the agent is unavailable when it is not configured.
 modelProviders:
   - anthropic-model-provider
+# Preferences first, then everything the installation has.
+#
+# Obot picks the model its llm alias names, but that alias is installation-wide
+# and commonly points at a provider this agent cannot use -- and then the choice
+# fell to whichever model sorted first by resource id, which is a hash. A coding
+# agent would land on the small fast model for no reason anyone chose.
+#
+# These are named the way the provider names them, not by resource id, because
+# an id is a per-installation hash that this file cannot know. An installation
+# without them falls through to the wildcard, so nothing here is required to
+# exist.
 models:
+  - claude-opus-5
+  - claude-sonnet-5
   - "*"
 maxInstancesPerUser: 3
 questions:

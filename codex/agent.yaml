@@ -10,13 +10,19 @@ iconDark: data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiByb2xlPSJpbWciIHZp
 terminal: true
 allowUserGitRepo: true
 allowUserMCPServers: true
-# Every model the installation has, rather than one pinned choice. Obot marks
-# which is the default and which is the fast one, so the agent can pick sensibly
-# without the template having to name a model that may not exist here.
 # Codex is written against OpenAI's API.
 modelProviders:
   - openai-model-provider
+# Preferences first, then everything the installation has. See the Claude Code
+# template for why a stated preference is needed at all.
+#
+# Named the way the provider names them rather than by resource id, which is a
+# per-installation hash. An installation without them falls through to the
+# wildcard, so nothing here is required to exist.
 models:
+  - gpt-5.6-sol
+  - gpt-5.6-terra
+  - gpt-5.6-luna
   - "*"
 maxInstancesPerUser: 3
 questions:
